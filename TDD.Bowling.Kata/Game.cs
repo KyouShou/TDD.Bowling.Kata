@@ -29,12 +29,7 @@ namespace TDD.Bowling.Kata
         }
         public int Score()
         {
-            var totalScore = 0;
-
-            totalScore += CalculateScoreBesideLastRound();
-            totalScore += CalculateLastRoundScore();
-
-            return totalScore;
+            return CalculateScoreBesideLastRound() + CalculateLastRoundScore();
         }
 
         private int CalculateScoreBesideLastRound()
@@ -49,18 +44,17 @@ namespace TDD.Bowling.Kata
 
                 if (IsSpare(round))
                 {
-                    scoreBesideLastRound += _rollRecords[GetNextRollIndex(firstPinIndexInRound + 1)];
+                    var indexOfNextRoll = GetNextRollIndex(firstPinIndexInRound + 1);
+                    scoreBesideLastRound += _rollRecords[indexOfNextRoll];
                 }
 
                 if (IsStrike(round))
                 {
                     var indexOfNextRoll = GetNextRollIndex(firstPinIndexInRound);
-                    var indexOfNextTwoRoll = GetNextRollIndex(indexOfNextRoll);
+                    scoreBesideLastRound += _rollRecords[indexOfNextRoll];
 
-                    if (indexOfNextRoll <= _rollRecords.Length - 1)
-                        scoreBesideLastRound += _rollRecords[indexOfNextRoll];
-                    if (indexOfNextTwoRoll <= _rollRecords.Length - 1)
-                        scoreBesideLastRound += _rollRecords[indexOfNextTwoRoll];
+                    var indexOfNextTwoRoll = GetNextRollIndex(indexOfNextRoll);
+                    scoreBesideLastRound += _rollRecords[indexOfNextTwoRoll];
                 }
             }
             return scoreBesideLastRound;
@@ -117,6 +111,7 @@ namespace TDD.Bowling.Kata
             else
                 return false;
         }
+
         private int GetFirstPinIndexInRound(int round)
         {
             return (round - 1) * 2;
