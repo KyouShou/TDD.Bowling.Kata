@@ -22,14 +22,14 @@ namespace TDD.Bowling.Kata.Test
         public void Score_RollOneTimeAndMiss_ReturnZero()
         {
             _game.Roll(0);
-            Assert.AreEqual(_game.Score(), 0);
+            Assert.AreEqual(0, _game.Score());
         }
 
         [Test]
         public void Score_RollAllMiss_ReturnZero()
         {
             RollMuitiTimes(0, 20);
-            Assert.AreEqual(_game.Score(), 0);
+            Assert.AreEqual(0, _game.Score());
         }
 
         [Test]
@@ -58,43 +58,43 @@ namespace TDD.Bowling.Kata.Test
         }
 
         [Test]
-        public void Score_TestSpareAtLastRound_RollSixFourFive_ReturnTwenty()
+        public void Score_TestSpareAtLastRound_RollSixFourFive_ReturnFifteen()
         {
             RollMuitiTimes(0, 18);
             _game.Roll(6);
             _game.Roll(4);
             _game.Roll(5);
-            Assert.AreEqual(20, _game.Score());
+            Assert.AreEqual(15, _game.Score());
         }
 
         [Test]
-        public void Score_TestSpareAtLastRound_RollSixFourTen_ReturnThirty()
+        public void Score_TestSpareAtLastRound_RollSixFourTen_ReturnTwenty()
         {
             RollMuitiTimes(0, 18);
             _game.Roll(6);
             _game.Roll(4);
             _game.Roll(10);
-            Assert.AreEqual(30, _game.Score());
+            Assert.AreEqual(20, _game.Score());
         }
 
         [Test]
-        public void Score_TestStrikeAtLastRound_RollTurkey_ReturnSixty()
+        public void Score_TestStrikeAtLastRound_RollTurkey_ReturnThirty()
         {
             RollMuitiTimes(0, 18);
             _game.Roll(10);
             _game.Roll(10);
             _game.Roll(10);
-            Assert.AreEqual(60, _game.Score());
+            Assert.AreEqual(30, _game.Score());
         }
 
         [Test]
-        public void Score_TestStrikeAtLastRound_RollTenTenSix_ReturnFourtyEight()
+        public void Score_TestStrikeAtLastRound_RollTenTenSix_ReturnTwentySix()
         {
             RollMuitiTimes(0, 18);
             _game.Roll(10);
             _game.Roll(10);
             _game.Roll(6);
-            Assert.AreEqual(48, _game.Score());
+            Assert.AreEqual(26, _game.Score());
         }
 
         [Test]
