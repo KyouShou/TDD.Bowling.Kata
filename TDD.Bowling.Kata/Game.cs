@@ -26,12 +26,13 @@ namespace TDD.Bowling.Kata
         public void Roll(int pins)
         {
             _rollRecords[_currentRolls++] = pins;
-            if (pins == 10)
+            if (pins == 10 && _currentRolls < 18)
                 _currentRolls++;
         }
         public int Score()
         {
-            for (int round = 1; round < 11; round++)
+            //處理前九回合的分數計算
+            for (int round = 1; round < 10; round++)
             {
                 int firstPinIndexInRound = GetFirstPinIndexInRound(round);
                 _score += _rollRecords[firstPinIndexInRound];
@@ -44,19 +45,53 @@ namespace TDD.Bowling.Kata
 
                 if (IsStrike(round))
                 {
-                    _score += _rollRecords[firstPinIndexInRound + 2];
-                    _score += _rollRecords[firstPinIndexInRound + 3];
+                    if (firstPinIndexInRound + 2 <= _rollRecords.Length - 1)
+                        _score += _rollRecords[firstPinIndexInRound + 2];
+                    if (firstPinIndexInRound + 3 <= _rollRecords.Length - 1)
+                        _score += _rollRecords[firstPinIndexInRound + 3];
                 }
             }
+
+            //處理最後一回合的分數計算
+            _score += CalculateLastRoundScore();
+
             return _score;
+        }
+
+        private int CalculateLastRoundScore()
+        {
+            var lastRoundScore = 0;
+
+            //處理最後一回合
+            int firstPinIndexInLastRound = GetFirstPinIndexInRound(10);
+            lastRoundScore += _rollRecords[firstPinIndexInLastRound];
+            lastRoundScore += _rollRecords[firstPinIndexInLastRound + 1];
+
+            if (IsSpare(10))
+            {
+                lastRoundScore += _rollRecords[firstPinIndexInLastRound + 2];
+                lastRoundScore += _rollRecords[firstPinIndexInLastRound + 2];
+            }
+            else if (IsStrike(10))
+            {
+                //計算第一球strike的額外分數
+                lastRoundScore += _rollRecords[firstPinIndexInLastRound + 1];
+                lastRoundScore += _rollRecords[firstPinIndexInLastRound + 2];
+
+                //計算第二球如果是strike的額外分數
+                if(_rollRecords[firstPinIndexInLastRound + 1] == 10)
+                    lastRoundScore += _rollRecords[firstPinIndexInLastRound + 2];
+                
+                //第三球本身的分數
+                lastRoundScore += _rollRecords[firstPinIndexInLastRound + 2];
+            }
+
+            return lastRoundScore;
         }
 
         private bool IsSpare(int round)
         {
-            //第一球
             int firstPinIndexInRound = GetFirstPinIndexInRound(round);
-
-            //第二球
             int secondPinIndexInRound = firstPinIndexInRound + 1;
 
             int totalPinsHittedInRound = _rollRecords[firstPinIndexInRound] + _rollRecords[secondPinIndexInRound];
